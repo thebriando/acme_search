@@ -7,16 +7,27 @@ import { ContactSearchResults } from "../SearchResults/ContactSearchResults";
 import { CalendarSearchResults } from "../SearchResults/CalendarSearchResults";
 import { Calendars } from "../data/Calendars";
 import { Calendar } from "../models/Calendar";
+import { SlackMessage } from "../models/SlackMessage";
+import { SlackMessages } from "../data/SlackMessages";
+import { SlackMessageSearchResults } from "../SearchResults/SlackMessageSearchResults";
+
+type searchFormState = {
+  value: string;
+  contactResults: Contact[];
+  calendarResults: Calendar[];
+  slackResults: SlackMessage[];
+};
 export class SearchForm extends Component<
   {},
-  { value: string; contactResults: Contact[]; calendarResults: Calendar[] }
+  searchFormState
 > {
   constructor(props: any) {
     super(props);
     this.state = {
       value: "",
       contactResults: [],
-      calendarResults: []
+      calendarResults: [],
+      slackResults: []
     };
   }
   handleSubmit = (event: any) => {
@@ -49,6 +60,19 @@ export class SearchForm extends Component<
         }
       });
     });
+    SlackMessages.forEach(message => {
+      message.matching_terms.forEach(term => {
+        if (
+          this.state.value.includes(term) &&
+          !this.state.slackResults.some(result => result === message)
+        ) {
+          // add to search results
+          const newResults = this.state.slackResults;
+          newResults.push(message);
+          this.setState({ slackResults: newResults });
+        }
+      })
+    })
   };
   handleChange = (event: any) => {
     event.preventDefault();
@@ -81,6 +105,14 @@ export class SearchForm extends Component<
             <CalendarSearchResults
               results={this.state.calendarResults}
             ></CalendarSearchResults>
+          </div>
+        )}
+        {this.state.slackResults.length > 0 && (
+          <div>
+            <h1>Slack Results</h1>
+            <SlackMessageSearchResults
+              results={this.state.slackResults}
+            ></SlackMessageSearchResults>
           </div>
         )}
       </div>
