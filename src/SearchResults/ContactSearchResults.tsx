@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import { Contact } from "../models/Contact";
-import {
-  Card,
-  CardContent,
-  Typography
-} from "@material-ui/core";
+import { Card, CardContent, Typography } from "@material-ui/core";
+import "./ContactSearchResults.css";
 
-export class SearchResults extends Component<{ results: Contact[] }, {}> {
+export class ContactSearchResults extends Component<
+  { results: Contact[] },
+  {}
+> {
   render() {
     const resultName = this.props.results.map(result => {
       return (
-        <div key={result.id}>
+        <div className="search-card" key={result.id}>
           <Card>
             <CardContent>
               <Typography color="textSecondary" gutterBottom>
@@ -21,7 +21,11 @@ export class SearchResults extends Component<{ results: Contact[] }, {}> {
               </Typography>
               <Typography color="textSecondary">
                 {result.emails.map(email => {
-                  return <span key={email}>{email}</span>;
+                  return (
+                    <span className="email" key={email}>
+                      {email}
+                    </span>
+                  );
                 })}
               </Typography>
               <Typography variant="body2" component="p">
