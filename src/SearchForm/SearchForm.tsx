@@ -17,10 +17,7 @@ type searchFormState = {
   calendarResults: Calendar[];
   slackResults: SlackMessage[];
 };
-export class SearchForm extends Component<
-  {},
-  searchFormState
-> {
+export class SearchForm extends Component<{}, searchFormState> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -30,10 +27,14 @@ export class SearchForm extends Component<
       slackResults: []
     };
   }
-  handleSubmit = (event: any) => {
+  handleSubmit = async (event: any) => {
     event.preventDefault();
     // clears previous results if there are any
-    this.setState({ contactResults: [], calendarResults: [] });
+    await this.setState({
+      contactResults: [],
+      calendarResults: [],
+      slackResults: []
+    });
     Contacts.forEach(contact => {
       contact.matching_terms.forEach(term => {
         if (
@@ -71,8 +72,8 @@ export class SearchForm extends Component<
           newResults.push(message);
           this.setState({ slackResults: newResults });
         }
-      })
-    })
+      });
+    });
   };
   handleChange = (event: any) => {
     event.preventDefault();
@@ -87,7 +88,12 @@ export class SearchForm extends Component<
             value={this.state.value}
             onChange={this.handleChange}
           ></TextField>
-          <Button type="submit" variant="contained" onClick={this.handleSubmit}>
+          <Button
+            type="submit"
+            variant="contained"
+            onClick={this.handleSubmit}
+            disabled={!this.state.value}
+          >
             Search
           </Button>
         </form>
