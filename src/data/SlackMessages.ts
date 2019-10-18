@@ -1,4 +1,4 @@
-import { SlackMessage } from "../models/SlackMessage";
+import { SlackMessage } from "../models/SearchObject";
 
 export const SlackMessages: SlackMessage[] = [
   {

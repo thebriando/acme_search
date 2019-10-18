@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Calendar } from "../models/Calendar";
+import { Calendar } from "../models/SearchObject";
 import { Card, CardContent, Typography } from "@material-ui/core";
 import "./ContactSearchResults.css";
 

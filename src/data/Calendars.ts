@@ -1,4 +1,4 @@
-import { Calendar } from "../models/Calendar";
+import { Calendar } from "../models/SearchObject";
 
 export const Calendars: Calendar[] = [
   {

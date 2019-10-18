@@ -1,15 +1,14 @@
 import React, { Component } from "react";
 import "../App.css";
-import { TextField, Button } from "@material-ui/core/";
+import { TextField, Button, Container } from "@material-ui/core/";
 import { Contacts } from "../data/Contacts";
-import { Contact } from "../models/Contact";
 import { ContactSearchResults } from "../SearchResults/ContactSearchResults";
 import { CalendarSearchResults } from "../SearchResults/CalendarSearchResults";
 import { Calendars } from "../data/Calendars";
-import { Calendar } from "../models/Calendar";
-import { SlackMessage } from "../models/SlackMessage";
+import { Contact, Calendar, SlackMessage } from "../models/SearchObject";
 import { SlackMessages } from "../data/SlackMessages";
 import { SlackMessageSearchResults } from "../SearchResults/SlackMessageSearchResults";
+import "../SearchForm/SearchForm.css";
 
 type searchFormState = {
   value: string;
@@ -81,13 +80,14 @@ export class SearchForm extends Component<{}, searchFormState> {
   };
   render() {
     return (
-      <div className="search-form">
+      <Container className="search-form">
         <form>
           <TextField
             margin="normal"
             value={this.state.value}
             onChange={this.handleChange}
           ></TextField>
+          <br></br>
           <Button
             type="submit"
             variant="contained"
@@ -121,7 +121,7 @@ export class SearchForm extends Component<{}, searchFormState> {
             ></SlackMessageSearchResults>
           </div>
         )}
-      </div>
+      </Container>
     );
   }
 }
