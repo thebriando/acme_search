@@ -23,4 +23,11 @@ export interface SlackMessage extends SearchObject{
   message: string;
   timestamp: string;
 }
+export interface Dropbox extends SearchObject {
+  path: string;
+  title: string;
+  shared_with?: string[];
+  matching_terms: string[];
+  created: string;
+}
 

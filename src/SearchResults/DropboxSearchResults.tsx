@@ -1,40 +1,36 @@
 import React, { Component } from "react";
-import { Calendar } from "../models/SearchObject";
+import { Dropbox } from "../models/SearchObject";
 import { Card, CardContent, Typography } from "@material-ui/core";
 import "./SearchResults.css";
 
-export class CalendarSearchResults extends Component<
-  { results: Calendar[] },
+export class DropboxSearchResults extends Component<
+  { results: Dropbox[] },
   {}
 > {
   render() {
     const resultName = this.props.results.map(result => {
-      const invitees: string[] = result.invitees.split(" ");
-      const key: string = `${result.id}_${result.title}`
       return (
-        <div className="search-card" key={key}>
+        <div className="search-card" key={result.id}>
           <Card>
             <CardContent>
               <Typography color="textSecondary" gutterBottom>
                 {result.title}
               </Typography>
               <Typography variant="h5" component="h2">
-                {result.date}
+                {result.created}
               </Typography>
               <Typography color="textSecondary">
-                {invitees.map(invitee => {
+                {/* {result.shared_with.map(invitee => {
                   return (
                     <span key={invitee}>
                       {invitee}
                     </span>
                   );
-                })}
+                })} */}
               </Typography>
-              {/* <Typography variant="body2" component="p">
-                {result.phones.map(phone => {
-                  return <span key={phone}>{phone}</span>;
-                })}
-              </Typography> */}
+              <Typography variant="body2" component="p">
+                {result.path}
+              </Typography>
             </CardContent>
           </Card>
         </div>

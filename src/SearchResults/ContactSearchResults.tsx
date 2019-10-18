@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Contact } from "../models/SearchObject";
 import { Card, CardContent, Typography } from "@material-ui/core";
-import "./ContactSearchResults.css";
+import "./SearchResults.css";
 
 export class ContactSearchResults extends Component<
   { results: Contact[] },

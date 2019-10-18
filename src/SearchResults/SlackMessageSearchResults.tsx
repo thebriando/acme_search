@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Card, CardContent, Typography } from "@material-ui/core";
-import "./ContactSearchResults.css";
+import "./SearchResults.css";
 import { SlackMessage } from "../models/SearchObject";
 
 export class SlackMessageSearchResults extends Component<

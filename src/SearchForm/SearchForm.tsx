@@ -2,19 +2,24 @@ import React, { Component } from "react";
 import "../App.css";
 import { TextField, Button, Container } from "@material-ui/core/";
 import { Contacts } from "../data/Contacts";
-import { ContactSearchResults } from "../SearchResults/ContactSearchResults";
-import { CalendarSearchResults } from "../SearchResults/CalendarSearchResults";
 import { Calendars } from "../data/Calendars";
-import { Contact, Calendar, SlackMessage } from "../models/SearchObject";
+import {
+  Contact,
+  Calendar,
+  SlackMessage,
+  Dropbox
+} from "../models/SearchObject";
 import { SlackMessages } from "../data/SlackMessages";
-import { SlackMessageSearchResults } from "../SearchResults/SlackMessageSearchResults";
+import { DropboxFiles } from "../data/DropboxFiles";
 import "../SearchForm/SearchForm.css";
+import { SearchResults } from "../SearchResults/SearchResults";
 
 type searchFormState = {
   value: string;
   contactResults: Contact[];
   calendarResults: Calendar[];
   slackResults: SlackMessage[];
+  dropboxResults: Dropbox[];
 };
 export class SearchForm extends Component<{}, searchFormState> {
   constructor(props: any) {
@@ -23,7 +28,8 @@ export class SearchForm extends Component<{}, searchFormState> {
       value: "",
       contactResults: [],
       calendarResults: [],
-      slackResults: []
+      slackResults: [],
+      dropboxResults: []
     };
   }
   handleSubmit = async (event: any) => {
@@ -32,44 +38,52 @@ export class SearchForm extends Component<{}, searchFormState> {
     await this.setState({
       contactResults: [],
       calendarResults: [],
-      slackResults: []
+      slackResults: [],
+      dropboxResults: []
     });
-    Contacts.forEach(contact => {
-      contact.matching_terms.forEach(term => {
-        if (
-          this.state.value.includes(term) &&
-          !this.state.contactResults.some(result => result === contact)
-        ) {
-          // add to search results
-          const newResults = this.state.contactResults;
-          newResults.push(contact);
-          this.setState({ contactResults: newResults });
-        }
-      });
+    const searchData = {
+      contact: Contacts,
+      calendar: Calendars,
+      slack: SlackMessages,
+      dropbox: DropboxFiles
+    };
+    Object.entries(searchData).forEach(entry => {
+      this.search(entry[1], entry[0]);
     });
-    Calendars.forEach(calendar => {
-      calendar.matching_terms.forEach(term => {
-        if (
-          this.state.value.includes(term) &&
-          !this.state.calendarResults.some(result => result === calendar)
-        ) {
-          // add to search results
-          const newResults = this.state.calendarResults;
-          newResults.push(calendar);
-          this.setState({ calendarResults: newResults });
-        }
-      });
-    });
-    SlackMessages.forEach(message => {
-      message.matching_terms.forEach(term => {
-        if (
-          this.state.value.includes(term) &&
-          !this.state.slackResults.some(result => result === message)
-        ) {
-          // add to search results
-          const newResults = this.state.slackResults;
-          newResults.push(message);
-          this.setState({ slackResults: newResults });
+  };
+  search = (data: any, searchType: any) => {
+    data.forEach((obj: any) => {
+      obj.matching_terms.forEach((term: any) => {
+        if (this.state.value.includes(term)) {
+          if (
+            searchType === "contact" &&
+            !this.state.contactResults.some(result => result === obj)
+          ) {
+            const newResults = this.state.contactResults;
+            newResults.push(obj);
+            this.setState({ contactResults: newResults });
+          } else if (
+            searchType === "calendar" &&
+            !this.state.calendarResults.some(result => result === obj)
+          ) {
+            const newResults = this.state.calendarResults;
+            newResults.push(obj);
+            this.setState({ calendarResults: newResults });
+          } else if (
+            searchType === "slack" &&
+            !this.state.slackResults.some(result => result === obj)
+          ) {
+            const newResults = this.state.slackResults;
+            newResults.push(obj);
+            this.setState({ slackResults: newResults });
+          } else if (
+            searchType === "dropbox" &&
+            !this.state.dropboxResults.some(result => result === obj)
+          ) {
+            const newResults = this.state.dropboxResults;
+            newResults.push(obj);
+            this.setState({ dropboxResults: newResults });
+          }
         }
       });
     });
@@ -97,30 +111,12 @@ export class SearchForm extends Component<{}, searchFormState> {
             Search
           </Button>
         </form>
-        {this.state.contactResults.length > 0 && (
-          <div>
-            <h1>Contact Results</h1>
-            <ContactSearchResults
-              results={this.state.contactResults}
-            ></ContactSearchResults>
-          </div>
-        )}
-        {this.state.calendarResults.length > 0 && (
-          <div>
-            <h1>Calendar Results</h1>
-            <CalendarSearchResults
-              results={this.state.calendarResults}
-            ></CalendarSearchResults>
-          </div>
-        )}
-        {this.state.slackResults.length > 0 && (
-          <div>
-            <h1>Slack Results</h1>
-            <SlackMessageSearchResults
-              results={this.state.slackResults}
-            ></SlackMessageSearchResults>
-          </div>
-        )}
+        <SearchResults
+          contactResults={this.state.contactResults}
+          calendarResults={this.state.calendarResults}
+          slackResults={this.state.slackResults}
+          dropboxResults={this.state.dropboxResults}
+        ></SearchResults>
       </Container>
     );
   }
