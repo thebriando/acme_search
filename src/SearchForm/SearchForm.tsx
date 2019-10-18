@@ -16,6 +16,7 @@ import { SearchResults } from "../SearchResults/SearchResults";
 
 type searchFormState = {
   value: string;
+  error: boolean;
   contactResults: Contact[];
   calendarResults: Calendar[];
   slackResults: SlackMessage[];
@@ -26,6 +27,7 @@ export class SearchForm extends Component<{}, searchFormState> {
     super(props);
     this.state = {
       value: "",
+      error: false,
       contactResults: [],
       calendarResults: [],
       slackResults: [],
@@ -36,6 +38,7 @@ export class SearchForm extends Component<{}, searchFormState> {
     event.preventDefault();
     // clears previous results if there are any
     await this.setState({
+      error: false,
       contactResults: [],
       calendarResults: [],
       slackResults: [],
@@ -50,11 +53,19 @@ export class SearchForm extends Component<{}, searchFormState> {
     Object.entries(searchData).forEach(entry => {
       this.search(entry[1], entry[0]);
     });
+    if (
+      this.state.contactResults.length === 0 &&
+      this.state.calendarResults.length === 0 &&
+      this.state.slackResults.length === 0 &&
+      this.state.dropboxResults.length === 0
+    ) {
+      this.setState({ error: true });
+    }
   };
   search = (data: any, searchType: any) => {
     data.forEach((obj: any) => {
-      obj.matching_terms.forEach((term: any) => {
-        if (this.state.value.includes(term)) {
+      obj.matching_terms.forEach((term: string) => {
+        if (this.state.value.toLowerCase().includes(term.toLowerCase())) {
           if (
             searchType === "contact" &&
             !this.state.contactResults.some(result => result === obj)
@@ -111,6 +122,7 @@ export class SearchForm extends Component<{}, searchFormState> {
             Search
           </Button>
         </form>
+        {this.state.error && <p>No results found</p>}
         <SearchResults
           contactResults={this.state.contactResults}
           calendarResults={this.state.calendarResults}
