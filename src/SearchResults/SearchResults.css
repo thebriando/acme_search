@@ -2,6 +2,6 @@
   padding-bottom: 2rem;
 }
 
-.email {
-  padding-right: 2rem;
+.email, .phone {
+  padding-right: 1rem;
 }

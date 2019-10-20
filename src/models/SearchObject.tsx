@@ -1,5 +1,5 @@
 export interface SearchObject {
-  id: string;
+  id?: string;
   matching_terms: string[];
 }
 
@@ -29,5 +29,12 @@ export interface Dropbox extends SearchObject {
   shared_with?: string[];
   matching_terms: string[];
   created: string;
+}
+
+export interface Tweet extends SearchObject {
+  user: string;
+  message: string;
+  timestamp: string;
+  matching_terms: string[];
 }
 

@@ -7,12 +7,14 @@ import {
   Contact,
   Calendar,
   SlackMessage,
-  Dropbox
+  Dropbox,
+  Tweet
 } from "../models/SearchObject";
 import { SlackMessages } from "../data/SlackMessages";
 import { DropboxFiles } from "../data/DropboxFiles";
 import "../SearchForm/SearchForm.css";
 import { SearchResults } from "../SearchResults/SearchResults";
+import { Tweets } from "../data/Tweets";
 
 type searchFormState = {
   value: string;
@@ -21,6 +23,7 @@ type searchFormState = {
   calendarResults: Calendar[];
   slackResults: SlackMessage[];
   dropboxResults: Dropbox[];
+  tweetResults: Tweet[];
 };
 export class SearchForm extends Component<{}, searchFormState> {
   constructor(props: any) {
@@ -31,7 +34,8 @@ export class SearchForm extends Component<{}, searchFormState> {
       contactResults: [],
       calendarResults: [],
       slackResults: [],
-      dropboxResults: []
+      dropboxResults: [],
+      tweetResults: []
     };
   }
   handleSubmit = async (event: any) => {
@@ -42,13 +46,15 @@ export class SearchForm extends Component<{}, searchFormState> {
       contactResults: [],
       calendarResults: [],
       slackResults: [],
-      dropboxResults: []
+      dropboxResults: [],
+      tweetResults: []
     });
     const searchData = {
       contact: Contacts,
       calendar: Calendars,
       slack: SlackMessages,
-      dropbox: DropboxFiles
+      dropbox: DropboxFiles,
+      tweet: Tweets
     };
     Object.entries(searchData).forEach(entry => {
       this.search(entry[1], entry[0]);
@@ -57,7 +63,8 @@ export class SearchForm extends Component<{}, searchFormState> {
       this.state.contactResults.length === 0 &&
       this.state.calendarResults.length === 0 &&
       this.state.slackResults.length === 0 &&
-      this.state.dropboxResults.length === 0
+      this.state.dropboxResults.length === 0 &&
+      this.state.tweetResults.length === 0
     ) {
       this.setState({ error: true });
     }
@@ -94,6 +101,13 @@ export class SearchForm extends Component<{}, searchFormState> {
             const newResults = this.state.dropboxResults;
             newResults.push(obj);
             this.setState({ dropboxResults: newResults });
+          } else if (
+            searchType === "tweet" &&
+            !this.state.tweetResults.some(result => result === obj)
+          ) {
+            const newResults = this.state.tweetResults;
+            newResults.push(obj);
+            this.setState({ tweetResults: newResults });
           }
         }
       });
@@ -128,6 +142,7 @@ export class SearchForm extends Component<{}, searchFormState> {
           calendarResults={this.state.calendarResults}
           slackResults={this.state.slackResults}
           dropboxResults={this.state.dropboxResults}
+          tweetResults={this.state.tweetResults}
         ></SearchResults>
       </Container>
     );

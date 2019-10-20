@@ -1,9 +1,16 @@
 import React, { Component } from "react";
-import { Contact, Calendar, SlackMessage, Dropbox } from "../models/SearchObject";
+import {
+  Contact,
+  Calendar,
+  SlackMessage,
+  Dropbox,
+  Tweet
+} from "../models/SearchObject";
 import "./SearchResults.css";
 import { ContactSearchResults } from "./ContactSearchResults";
 import { CalendarSearchResults } from "./CalendarSearchResults";
 import { SlackMessageSearchResults } from "./SlackMessageSearchResults";
+import { TweetSearchResults } from "./TweetSearchResults";
 import { DropboxSearchResults } from "./DropboxSearchResults";
 
 export class SearchResults extends Component<
@@ -12,6 +19,7 @@ export class SearchResults extends Component<
     calendarResults: Calendar[];
     slackResults: SlackMessage[];
     dropboxResults: Dropbox[];
+    tweetResults: Tweet[];
   },
   {}
 > {
@@ -48,6 +56,14 @@ export class SearchResults extends Component<
             <DropboxSearchResults
               results={this.props.dropboxResults}
             ></DropboxSearchResults>
+          </div>
+        )}
+        {this.props.tweetResults.length > 0 && (
+          <div>
+            <h1>Twitter Results</h1>
+            <TweetSearchResults
+              results={this.props.tweetResults}
+            ></TweetSearchResults>
           </div>
         )}
       </div>
