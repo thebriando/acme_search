@@ -16,7 +16,7 @@ import "../SearchForm/SearchForm.css";
 import { SearchResults } from "../SearchResults/SearchResults";
 import { Tweets } from "../data/Tweets";
 
-type searchFormState = {
+interface State {
   value: string;
   error: boolean;
   contactResults: Contact[];
@@ -24,8 +24,8 @@ type searchFormState = {
   slackResults: SlackMessage[];
   dropboxResults: Dropbox[];
   tweetResults: Tweet[];
-};
-export class SearchForm extends Component<{}, searchFormState> {
+}
+export class SearchForm extends Component<{}, State> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -50,11 +50,11 @@ export class SearchForm extends Component<{}, searchFormState> {
       tweetResults: []
     });
     const searchData = {
-      contact: Contacts,
-      calendar: Calendars,
-      slack: SlackMessages,
-      dropbox: DropboxFiles,
-      tweet: Tweets
+      contactResults: Contacts,
+      calendarResults: Calendars,
+      slackResults: SlackMessages,
+      dropboxResults: DropboxFiles,
+      tweetResults: Tweets
     };
     // Searches through each dataset
     Object.entries(searchData).forEach(entry => {
@@ -75,43 +75,15 @@ export class SearchForm extends Component<{}, searchFormState> {
     data.forEach((obj: any) => {
       obj.matching_terms.forEach((term: string) => {
         // Searches for user's query in matching_terms for each object
-        if (this.state.value.toLowerCase().includes(term.toLowerCase())) {
-          if (
-            searchType === "contact" &&
-            !this.state.contactResults.some(result => result === obj)
-          ) {
-            const newResults = this.state.contactResults;
-            newResults.push(obj);
-            this.setState({ contactResults: newResults });
-          } else if (
-            searchType === "calendar" &&
-            !this.state.calendarResults.some(result => result === obj)
-          ) {
-            const newResults = this.state.calendarResults;
-            newResults.push(obj);
-            this.setState({ calendarResults: newResults });
-          } else if (
-            searchType === "slack" &&
-            !this.state.slackResults.some(result => result === obj)
-          ) {
-            const newResults = this.state.slackResults;
-            newResults.push(obj);
-            this.setState({ slackResults: newResults });
-          } else if (
-            searchType === "dropbox" &&
-            !this.state.dropboxResults.some(result => result === obj)
-          ) {
-            const newResults = this.state.dropboxResults;
-            newResults.push(obj);
-            this.setState({ dropboxResults: newResults });
-          } else if (
-            searchType === "tweet" &&
-            !this.state.tweetResults.some(result => result === obj)
-          ) {
-            const newResults = this.state.tweetResults;
-            newResults.push(obj);
-            this.setState({ tweetResults: newResults });
-          }
+        const key: keyof State = searchType;
+        const results: any = this.state[key];
+        if (
+          this.state.value.toLowerCase().includes(term.toLowerCase()) &&
+          results &&
+          !results.some((result: any) => result === obj)
+        ) {
+          results.push(obj);
+          this.setState({ [key]: results } as any);
         }
       });
     });
