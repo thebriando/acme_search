@@ -14,9 +14,9 @@ export class SlackMessageSearchResults extends Component<
           <Card>
             <CardContent>
               <Typography color="textSecondary" gutterBottom>
-                {result.channel}
+                #{result.channel}
               </Typography>
-              <Typography variant="h5" component="h2">
+              <Typography className="author" variant="h5" component="h2">
                 {result.author}
               </Typography>
               <Typography color="textSecondary">

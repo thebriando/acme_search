@@ -5,3 +5,7 @@
 .email, .phone {
   padding-right: 1rem;
 }
+
+.invitee, .author {
+  text-transform: capitalize;
+}

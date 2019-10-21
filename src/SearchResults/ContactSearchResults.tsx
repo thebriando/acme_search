@@ -30,7 +30,11 @@ export class ContactSearchResults extends Component<
               </Typography>
               <Typography variant="body2" component="p">
                 {result.phones.map(phone => {
-                  return <span className="phone" key={phone}>{phone}</span>;
+                  return (
+                    <span className="phone" key={phone}>
+                      {phone}
+                    </span>
+                  );
                 })}
               </Typography>
             </CardContent>

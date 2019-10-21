@@ -9,9 +9,8 @@ export class TweetSearchResults extends Component<
 > {
   render() {
     const resultName = this.props.results.map(result => {
-      const date = new Date(result.timestamp);
       return (
-        <div className="search-card" key={result.id}>
+        <div className="search-card" key={result.timestamp}>
           <Card>
             <CardContent>
               <Typography color="textSecondary" gutterBottom>

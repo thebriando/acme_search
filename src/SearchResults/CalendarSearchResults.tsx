@@ -10,7 +10,7 @@ export class CalendarSearchResults extends Component<
   render() {
     const resultName = this.props.results.map(result => {
       const invitees: string[] = result.invitees.split(" ");
-      const key: string = `${result.id}_${result.title}`
+      const key: string = `${result.id}_${result.title}`;
       return (
         <div className="search-card" key={key}>
           <Card>
@@ -22,10 +22,11 @@ export class CalendarSearchResults extends Component<
                 {result.date}
               </Typography>
               <Typography color="textSecondary">
+                Invitees:{" "}
                 {invitees.map(invitee => {
                   return (
-                    <span key={invitee}>
-                      {invitee}
+                    <span className="invitee" key={invitee}>
+                      {invitee}{" "}
                     </span>
                   );
                 })}

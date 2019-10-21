@@ -56,9 +56,11 @@ export class SearchForm extends Component<{}, searchFormState> {
       dropbox: DropboxFiles,
       tweet: Tweets
     };
+    // Searches through each dataset
     Object.entries(searchData).forEach(entry => {
       this.search(entry[1], entry[0]);
     });
+    // Sets error if no results are found
     if (
       this.state.contactResults.length === 0 &&
       this.state.calendarResults.length === 0 &&
@@ -72,6 +74,7 @@ export class SearchForm extends Component<{}, searchFormState> {
   search = (data: any, searchType: any) => {
     data.forEach((obj: any) => {
       obj.matching_terms.forEach((term: string) => {
+        // Searches for user's query in matching_terms for each object
         if (this.state.value.toLowerCase().includes(term.toLowerCase())) {
           if (
             searchType === "contact" &&
@@ -112,6 +115,35 @@ export class SearchForm extends Component<{}, searchFormState> {
         }
       });
     });
+    // Sorts results
+    this.sort();
+  };
+  sort = () => {
+    // Sorts contacts by full name
+    this.state.contactResults.sort((a: Contact, b: Contact) =>
+      a.name.localeCompare(b.name)
+    );
+    // Sorts calendar results by date
+    this.state.calendarResults.sort((a: Calendar, b: Calendar) => {
+      return this.dateSort(a.date, b.date);
+    });
+    // Sorts slack messages by timestamp
+    this.state.slackResults.sort((a: SlackMessage, b: SlackMessage) => {
+      return this.dateSort(a.timestamp, b.timestamp);
+    });
+    // Sorts dropbox results by date created
+    this.state.dropboxResults.sort((a: Dropbox, b: Dropbox) => {
+      return this.dateSort(a.created, b.created);
+    });
+    // Sorts tweets by timestamp
+    this.state.tweetResults.sort((a: Tweet, b: Tweet) => {
+      return this.dateSort(a.timestamp, b.timestamp);
+    });
+  };
+  dateSort = (a: string, b: string) => {
+    const dateA = new Date(a);
+    const dateB = new Date(b);
+    return dateA.getTime() - dateB.getTime();
   };
   handleChange = (event: any) => {
     event.preventDefault();

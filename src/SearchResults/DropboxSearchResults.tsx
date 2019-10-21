@@ -14,10 +14,10 @@ export class DropboxSearchResults extends Component<
           <Card>
             <CardContent>
               <Typography color="textSecondary" gutterBottom>
-                {result.title}
+                {result.created}
               </Typography>
               <Typography variant="h5" component="h2">
-                {result.created}
+                File Name: {result.title}
               </Typography>
               <Typography color="textSecondary">
                 {/* {result.shared_with.map(invitee => {
@@ -29,7 +29,7 @@ export class DropboxSearchResults extends Component<
                 })} */}
               </Typography>
               <Typography variant="body2" component="p">
-                {result.path}
+                File Path: {result.path}
               </Typography>
             </CardContent>
           </Card>
