@@ -73,21 +73,23 @@ export class SearchForm extends Component<{}, State> {
   };
   search = (data: any, searchType: any) => {
     data.forEach((obj: any) => {
-      obj.matching_terms.forEach((term: string) => {
-        // Searches for user's query in matching_terms for each object
+      // checks if matching terms contains user queries
+      // queries are determined by taking the user's input and splitting it
+      // into an array by spaces
+      if (
+        obj.matching_terms.some((r: string) =>
+          this.state.value.split(" ").includes(r)
+        )
+      ) {
         const key: keyof State = searchType;
         const results: any = this.state[key];
-        if (
-          this.state.value.toLowerCase().includes(term.toLowerCase()) &&
-          results &&
-          !results.some((result: any) => result === obj)
-        ) {
+        if (results && !results.some((result: any) => result === obj)) {
           results.push(obj);
           this.setState({ [key]: results } as any);
         }
-      });
+      }
     });
-    // Sorts results
+    // Sorts all results
     this.sort();
   };
   sort = () => {
