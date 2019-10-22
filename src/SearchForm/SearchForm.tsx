@@ -1,8 +1,13 @@
 import React, { Component } from "react";
 import "../App.css";
+import "../SearchForm/SearchForm.css";
+import { SearchResults } from "../SearchResults/SearchResults";
 import { TextField, Button, Container } from "@material-ui/core/";
 import { Contacts } from "../data/Contacts";
 import { Calendars } from "../data/Calendars";
+import { SlackMessages } from "../data/SlackMessages";
+import { DropboxFiles } from "../data/DropboxFiles";
+import { Tweets } from "../data/Tweets";
 import {
   Contact,
   Calendar,
@@ -10,11 +15,6 @@ import {
   Dropbox,
   Tweet
 } from "../models/SearchObject";
-import { SlackMessages } from "../data/SlackMessages";
-import { DropboxFiles } from "../data/DropboxFiles";
-import "../SearchForm/SearchForm.css";
-import { SearchResults } from "../SearchResults/SearchResults";
-import { Tweets } from "../data/Tweets";
 
 interface State {
   value: string;
@@ -72,15 +72,11 @@ export class SearchForm extends Component<{}, State> {
     }
   };
   search = (data: any, searchType: any) => {
+    const userTerms = this.state.value.split(/,| /);
     data.forEach((obj: any) => {
-      // checks if matching terms contains user queries
-      // queries are determined by taking the user's input and splitting it
-      // into an array by spaces
-      if (
-        obj.matching_terms.some((r: string) =>
-          this.state.value.split(" ").includes(r)
-        )
-      ) {
+      // checks if matching terms contains user's search terms
+      // search terms are calculated by separating user's input by commas or spaces
+      if (obj.matching_terms.some((term: string) => userTerms.includes(term))) {
         const key: keyof State = searchType;
         const results: any = this.state[key];
         if (results && !results.some((result: any) => result === obj)) {
@@ -89,7 +85,7 @@ export class SearchForm extends Component<{}, State> {
         }
       }
     });
-    // Sorts all results
+    // Sorts all results in ascending order
     this.sort();
   };
   sort = () => {
@@ -142,7 +138,7 @@ export class SearchForm extends Component<{}, State> {
             Search
           </Button>
         </form>
-        {this.state.error && <p>No results found</p>}
+        {this.state.error && <p>No results found.</p>}
         <SearchResults
           contactResults={this.state.contactResults}
           calendarResults={this.state.calendarResults}
